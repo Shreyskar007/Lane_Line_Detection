@@ -1,6 +1,3 @@
-# **Lane Lines Detection Using Python and OpenCV** 
-### In this project, I used Python and OpenCV to detect lane lines on the road. I developed a processing pipeline that works on a series of individual images, and applied the result to a video stream.
-
 ![jpg](output_example.jpg)
 
 Pipeline architecture:
@@ -17,13 +14,6 @@ Pipeline architecture:
 7. Apply on video streams.
 
 I'll explain each step in details below.
-
-## **Environement:**
----
-- Windows 7
-- Anaconda 4.3.29
-- Python 3.6.2
-- OpenCV 3.1.0
 
 ### **1. Loading test images:**
 ----
@@ -224,40 +214,6 @@ def draw_lane_lines(image, lines, color=[255, 0, 0], thickness=12):
         if line is not None:
             cv2.line(line_image, *line,  color, thickness)
     return cv2.addWeighted(image, 1.0, line_image, 1.0, 0.0)
-```
-
-
-### **7. Apply on video streams**
-----
-Now, we'll use the above functions to detect lane lines from a video stream.
-The video inputs are in test_videos folder. The video outputs are generated in output_videos folder.
-
-```python
-def frame_processor(image):
-    """
-    Process the input frame to detect lane lines.
-        Parameters:
-            image: Single video frame.
-    """
-    color_select = HSL_color_selection(image)
-    gray         = gray_scale(color_select)
-    smooth       = gaussian_smoothing(gray)
-    edges        = canny_detector(smooth)
-    region       = region_selection(edges)
-    hough        = hough_transform(region)
-    result       = draw_lane_lines(image, lane_lines(image, hough))
-    return result
-
-def process_video(test_video, output_video):
-    """
-    Read input video stream and produce a video file with detected lane lines.
-        Parameters:
-            test_video: Input video.
-            output_video: A video file with detected lane lines.
-    """
-    input_video = VideoFileClip(os.path.join('test_videos', test_video), audio=False)
-    processed = input_video.fl_image(frame_processor)
-    processed.write_videofile(os.path.join('output_videos', output_video), audio=False)
 ```
 
 ## **Conclusion:**
